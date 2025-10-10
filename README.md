@@ -1,6 +1,6 @@
 # 🏠 House Price Predictor – An MLOps Learning Project
 
-Welcome to the **House Price Predictor** project! This is a real-world, end-to-end MLOps use case designed to help you master the art of building and operationalizing machine learning pipelines.
+Welcome to the **House Price Predictor** project! This is a real-world, end-to-end MLOps use case that is forked but changed from the one tought through Udemy as I have changed the data set to a different one. In additio
 
 You'll start from raw data and move through data preprocessing, feature engineering, experimentation, model tracking with MLflow, and optionally using Jupyter for exploration – all while applying industry-grade tooling.
 
@@ -14,16 +14,19 @@ Check out the [MLOps Bootcamp at School of DevOps](https://schoolofdevops.com) t
 ```
 house-price-predictor/
 ├── configs/                # YAML-based configuration for models
-├── data/                   # Raw and processed datasets
 ├── deployment/
 │   └── mlflow/             # Docker Compose setup for MLflow
-├── models/                 # Trained models and preprocessors
+├── docs/                   # resources about the project.
 ├── notebooks/              # Optional Jupyter notebooks for experimentation
 ├── src/
-│   ├── data/               # Data cleaning and preprocessing scripts
+|   |── house_price_predictor
+      |── __init__.py
+│     ├── data/               # Data cleaning and preprocessing scripts
 │   ├── features/           # Feature engineering pipeline
 │   ├── models/             # Model training and evaluation
-├── requirements.txt        # Python dependencies
+├── enivronment.yml         # Python dependencies
+|── CHANGELOG.MD            # Indicaticating changes and updates to proejct
+|── CONTRIBUTING.MD         # People who worked on the project
 └── README.md               # You’re here!
 ```
 
@@ -36,8 +39,7 @@ To begin, ensure the following tools are installed on your system:
 - [Python 3.11](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/)
 - [Visual Studio Code](https://code.visualstudio.com/) or your preferred editor
-- [UV – Python package and environment manager](https://github.com/astral-sh/uv)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) **or** [Podman Desktop](https://podman-desktop.io/)
+- [Podman Desktop](https://podman-desktop.io/)
 
 ---
 
@@ -53,17 +55,11 @@ To begin, ensure the following tools are installed on your system:
    cd house-price-predictor
    ```
 
-3. **Setup Python Virtual Environment using UV:**
+3. **Setup Python Environment using conda:**
 
    ```bash
-   uv venv --python python3.11
-   source .venv/bin/activate
-   ```
-
-4. **Install dependencies:**
-
-   ```bash
-   uv pip install -r requirements.txt
+   cd ~/repos
+   conda env create -f environment.yml
    ```
 
 ---
@@ -71,6 +67,10 @@ To begin, ensure the following tools are installed on your system:
 ## 📊 Setup MLflow for Experiment Tracking
 
 To track experiments and model runs:
+
+** Under construction**
+I alrady have my own personaly mlflow tracking server and airflow
+setup locally thus I will be changing this from the course to match my current setup.
 
 ```bash
 cd deployment/mlflow
@@ -86,18 +86,6 @@ podman compose ps
 ```
 
 Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
-
----
-
-## 📒 Using JupyterLab (Optional)
-
-If you prefer an interactive experience, launch JupyterLab with:
-
-```bash
-uv python -m jupyterlab
-# or
-python -m jupyterlab
-```
 
 ---
 
@@ -178,10 +166,3 @@ This project is part of the [**MLOps Bootcamp**](https://schoolofdevops.com) at 
 ---
 
 ## 🤝 Contributing
-
-We welcome contributions, issues, and suggestions to make this project even better. Feel free to fork, explore, and raise PRs!
-
----
-
-Happy Learning!  
-— Team **School of DevOps**
