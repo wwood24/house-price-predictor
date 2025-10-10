@@ -13,11 +13,13 @@ Check out the [MLOps Bootcamp at School of DevOps](https://schoolofdevops.com) t
 
 ```
 house-price-predictor/
+|── api                     # runs the inference through fast api
 ├── configs/                # YAML-based configuration for models
 ├── deployment/
 │   └── mlflow/             # Docker Compose setup for MLflow
 ├── docs/                   # resources about the project.
 ├── notebooks/              # Optional Jupyter notebooks for experimentation
+|── scripts                 # CLI scripts to run code.
 ├── src/
 |   |── house_price_predictor
       |── __init__.py
