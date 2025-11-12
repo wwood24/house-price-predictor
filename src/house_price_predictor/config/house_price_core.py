@@ -25,18 +25,18 @@ class AppConfig(BaseModel):
 class ModelConfig(BaseModel):
     columns_to_convert_to_int:t.List[str]
     target_variable: str
-    features_set:t.List[str]
-    binary_features:t.List[str]
-    linear_scaled_features:t.List[str]
+    features_set: t.List[str]
+    binary_features: t.List[str]
+    linear_scaled_features: t.List[str]
     preprocess_pipeline_name: str
     model_name: str
     best_model:str
-    best_model_params:t.Dict[str,t.Any]
+    best_model_params: t.Dict[str,t.Any]
     
     
 class Config(BaseModel):
-    app_config = AppConfig
-    model_config = ModelConfig
+    app_configs: AppConfig
+    model_configs: ModelConfig
     
 
 def find_config_file()->Path:
@@ -78,7 +78,7 @@ def fetch_configs_from_yaml(cfg_path:Path=None)->YAML:
     if not cfg_path:
         cfg_path = find_config_file()
     if cfg_path:
-        with open(cfg_path,'rb') as file:
+        with open(cfg_path,'r') as file:
             parse_configs = load(file.read())
             return parse_configs
     raise OSError(f'unable to parse configs from {cfg_path}')
@@ -101,8 +101,8 @@ def create_and_validate_configs(parsed_configs:YAML=None) ->Config:
         parsed_configs = fetch_configs_from_yaml()
         
     _config= Config(
-        app_config = AppConfig(**parsed_configs.data),
-        model_config = ModelConfig(**parsed_configs.data)
+        app_configs = AppConfig(**parsed_configs.data),
+        model_configs = ModelConfig(**parsed_configs.data)
     )
     
     return _config
