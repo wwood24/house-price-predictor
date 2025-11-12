@@ -3,6 +3,8 @@ mlflow_tracking_uri: http://localhost:5000
 mlflow_experiment_id: 6
 raw_data_file: train.csv
 clean_data_file: house_price_processed.pkl
+train_file: train_data.pkl
+test_file: test_data.pkl
 columns_to_convert_to_int:
  - BsmtFullBath
  - BsmtHalfBath

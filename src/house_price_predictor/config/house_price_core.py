@@ -21,6 +21,8 @@ class AppConfig(BaseModel):
     mlflow_experiment_id: int
     raw_data_file: str
     clean_data_file: str
+    train_file: str
+    test_file: str
     
 class ModelConfig(BaseModel):
     columns_to_convert_to_int:t.List[str]
