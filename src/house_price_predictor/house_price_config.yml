@@ -1,0 +1,49 @@
+package_name: house_price_predictor
+mlflow_tracking_uri: http://localhost:5000
+mlflow_experiment_id: 6
+raw_data_file: train.csv
+clean_data_file: house_price_processed.pkl
+columns_to_convert_to_int:
+ - BsmtFullBath
+ - BsmtHalfBath
+ - FullBath
+ - HalfBath
+ - KitchenAbvGr
+ - Fireplaces
+ - YrSold
+target_variable: SalePrice
+features_set:
+ - OverallQual
+ - OverallCond
+ - age_at_sale
+ - age_of_house_squared
+ - house_have_remodel
+ - GrLivArea
+ - TotalBsmtSF
+ - total_sf
+ - ratio_finished_bsmt
+ - basement_ratio
+ - total_full_baths
+ - total_half_baths
+ - BedroomAbvGr
+ - bedrooms_per_1ksf
+ - bed_bath_ratio
+ - has_garage
+ - garage_finsihed'
+binary_features:
+ - house_have_remodel
+ - has_garage
+ - garage_finished
+linear_scaled_features:
+ - GrLivArea
+ - TotalBsmtSF
+ - total_sf
+preprocess_pipeline_name: house_price_pipeline
+model_name: house_price_model
+best_model: LightGBM
+best_model_params:
+ boosting_type: gbdt
+ learning_rate: 0.05
+ n_estimators: 100
+ n_jobs: -1
+ num_leaves: 35
