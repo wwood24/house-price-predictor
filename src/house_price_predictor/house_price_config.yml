@@ -38,6 +38,7 @@ linear_scaled_features:
  - GrLivArea
  - TotalBsmtSF
  - total_sf
+preproces_pipeline_name: house_price_pipeline
 model_name: house_price_model
 best_model: LightGBM
 best_model_params:
