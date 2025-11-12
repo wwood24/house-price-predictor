@@ -12,7 +12,7 @@ load_dotenv()
 
 PROJECT_ROOT = Path(house_price_predictor.__file__).resolve().parent
 ROOT = PROJECT_ROOT.parent
-DATA_DIR = os.getenv('DATA_DIR','/app/data')
+DATA_DIR = Path(os.getenv('DATA_DIR','/app/data'))
 CONFIG_FILE_PATH = PROJECT_ROOT /'house_price_config.yml'
 
 class AppConfig(BaseModel):

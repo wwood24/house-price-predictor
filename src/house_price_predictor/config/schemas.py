@@ -1,7 +1,9 @@
 from pydantic import BaseModel, Field
-from typing import List
+import typing as t
 
 class HousePredictionRequest(BaseModel):
+    YrSold: t.Optional[int] = Field(...,default=None,description='Year House Was Sold')
+    YearBuilt: int = Field(...,gt=1800,description='Year House was built')
     OverallQual: int = Field(...,ge=1,le=10,description='Overall Quality of House material as a scale of 1-10')
     OverallCond: int = Field(...,ge=1,le=10,description='Overall Condition of House as scale of 1-10')
     age_at_sale: int = Field(...,ge=0,description='Age of House at time of Sale')
@@ -24,6 +26,6 @@ class HousePredictionRequest(BaseModel):
 
 class PredictionResponse(BaseModel):
     predicted_price: float
-    confidence_interval: List[float]
-    features_importance: dict
+    confidence_interval: t.List[float]
+    features_importance: t.Dict[str,float]
     prediction_time: str
