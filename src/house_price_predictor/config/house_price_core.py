@@ -25,6 +25,7 @@ class AppConfig(BaseModel):
     test_file: str
     
 class ModelConfig(BaseModel):
+    columns_to_rename: t.Dict[str,str]
     columns_to_convert_to_int:t.List[str]
     target_variable: str
     features_set: t.List[str]
@@ -32,6 +33,7 @@ class ModelConfig(BaseModel):
     linear_scaled_features: t.List[str]
     preprocess_pipeline_name: str
     model_name: str
+    model_type: str
     best_model:str
     best_model_params: t.Dict[str,t.Any]
     
