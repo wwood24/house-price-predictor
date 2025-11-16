@@ -22,7 +22,9 @@ class AppConfig(BaseModel):
     raw_data_file: str
     clean_data_file: str
     train_file: str
+    train_y_file: str
     test_file: str
+    test_y_file: str
     
 class ModelConfig(BaseModel):
     columns_to_rename: t.Dict[str,str]
