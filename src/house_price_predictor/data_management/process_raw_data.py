@@ -7,7 +7,7 @@ import typing as t
 
 
 
-def clean_data(df:pd.DataFrame) ->pd.DataFrame:
+def clean_data(df:pd.DataFrame,cols_to_rename:t.Dict[str,str]) ->pd.DataFrame:
   
     
     
@@ -26,6 +26,7 @@ def clean_data(df:pd.DataFrame) ->pd.DataFrame:
                 # means its of string type fill will mode
                 mode_val = cleaned_df[col].mode()
                 cleaned_df[col].fillna(mode_val,inplace=True)
+    cleaned_df.rename(columns=cols_to_rename,inplace=True)
     return cleaned_df
 def fix_data_types_to_int(df:pd.DataFrame,cols:t.List[str]) ->pd.DataFrame:
     

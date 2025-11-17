@@ -34,7 +34,7 @@ class HousePricePreprocessor(BaseEstimator,TransformerMixin):
                 X[col] = np.log1p(X[col])
             self.scaler.fit(X[numeric_cols])
         return self
-    def transform(self,X:pd.DataFame,y=None) ->pd.DataFrame:
+    def transform(self,X:pd.DataFrame,y=None) ->pd.DataFrame:
         """Transform or data using our preprocessing pipeline
 
         Parameters
