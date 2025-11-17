@@ -3,6 +3,12 @@ mlflow_tracking_uri: http://localhost:5000
 mlflow_experiment_id: 6
 raw_data_file: train.csv
 clean_data_file: house_price_processed.pkl
+train_file: train_data.pkl
+train_y_file: train_y_data.pkl
+test_file: test_data.pkl
+test_y_file: test_y_data.pkl
+columns_to_rename:
+ BsmtFinSF1: BsmtFinSF
 columns_to_convert_to_int:
  - BsmtFullBath
  - BsmtHalfBath
@@ -29,7 +35,7 @@ features_set:
  - bedrooms_per_1ksf
  - bed_bath_ratio
  - has_garage
- - garage_finsihed'
+ - garage_finished
 binary_features:
  - house_have_remodel
  - has_garage
@@ -38,8 +44,9 @@ linear_scaled_features:
  - GrLivArea
  - TotalBsmtSF
  - total_sf
-preprocess_pipeline_name: house_price_pipeline
+preprocess_pipeline_name: house_price_preprocessor
 model_name: house_price_model
+model_type: tree
 best_model: LightGBM
 best_model_params:
  boosting_type: gbdt
