@@ -5,6 +5,8 @@ from house_price_predictor.config.house_price_core import ROOT,DATA_DIR,config
 from house_price_predictor.data_management.process_raw_data import clean_data,fix_data_types_to_int
 from house_price_predictor.features.engineering import HousePricePreprocessor
 from sklearn.model_selection import train_test_split
+import mlflow
+from mlflow.tracking import MlflowClient
 
 def etl_model_training():
     print('Beginning the ETL Process')
@@ -30,10 +32,21 @@ def preprocessing_training_pipeline():
     
     preprocessor = HousePricePreprocessor(model_type='tree')
     
-    preprocessor.fit(x_train)
+    # setup Mflow tracking
+    mlflow.set_tracking_uri(config.app_configs.mlflow_tracking_uri)
+    exp_id = config.app_configs.mlflow_experiment_id
     
-    x_train_transformed = preprocessor.transform(x_train)
-    x_test_transformed = preprocessor.transform(x_test)
+    with mlflow.start_run(experiment_id=exp_id,
+                          run_name='preprocessor_pipeline') as run:
+        
+    
+        preprocessor.fit(x_train)
+        mlflow.sklearn.log_model(sk_model=preprocessor,
+                                 artifact_path=config.model_configs.preprocess_pipeline_name)
+        x_train_transformed = preprocessor.transform(x_train)
+        x_test_transformed = preprocessor.transform(x_test)
+    print(f'the run info is: {run.info.artifact_uri}')
+    print(f'the run other info is {run.info.run_id}')
     # save data
     x_train_transformed.to_pickle(DATA_DIR/config.app_configs.train_file)
     x_test_transformed.to_pickle(DATA_DIR/config.app_configs.test_file)

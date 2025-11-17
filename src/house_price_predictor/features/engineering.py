@@ -164,7 +164,7 @@ class HousePricePreprocessor(BaseEstimator,TransformerMixin):
                              'ratio_finished_bsmt','basement_ratio',
                              'total_full_baths','total_half_baths',
                              'BedroomAbvGr','bedrooms_per_1ksf',
-                 'bed_bath_ratio','has_garage','garage_finsihed']
+                 'bed_bath_ratio','has_garage','garage_finished']
         X = pd.DataFrame(X,columns=cols_for_modeling)
         return X
     
