@@ -18,7 +18,8 @@ CONFIG_FILE_PATH = PROJECT_ROOT /'house_price_config.yml'
 class AppConfig(BaseModel):
     package_name: str
     mlflow_tracking_uri: str
-    mlflow_experiment_id: int
+    mlflow_experiment_id: str
+    mlflow_run_name: str
     raw_data_file: str
     clean_data_file: str
     train_file: str
