@@ -5,19 +5,19 @@ from pathlib import Path
 import datetime as dt
 
 class HousePriceLogger:
-    def __init__(self):
-        self.logger
+    def __init__(self,log_file:t.Union[str,Path]):
+        self.log_file = log_file
     
     def get_logger(self,logger_name:str,log_file:t.Union[str,Path]) -> logging.Logger:
-        self.logger = logging.getLogger(name=logger_name)
-        self.logger.setLevel(level=logging.INFO)
+        logger = logging.getLogger(name=logger_name)
+        logger.setLevel(level=logging.INFO)
         
-        f_handler = logging.FileHandler(filename=log_file)
+        f_handler = logging.FileHandler(filename=self.log_file)
         formatter = logging.Formatter(fmt=f'%(asctime)s - %(levelname)s - %(name)s - %(filename)s - %(message)s')
         f_handler.setFormatter(formatter)
         
-        self.logger.addHandler(f_handler)
-        return self.logger
+        logger.addHandler(f_handler)
+        return logger
     
     
 
@@ -29,10 +29,10 @@ def default_logger() ->logging.Logger:
     
     
     
-def house_price_logger(logger:t.Union[HousePriceLogger,logging.Logger],log_file:t.Union[str,Path]):
+def house_price_logger(logger:t.Union[HousePriceLogger,logging.Logger]):
     def setup_logger(func):
         if isinstance(logger,HousePriceLogger):
-            logger = logger.get_logger(logger_name=f'{func.__name__}',log_file=log_file)
+            logger = logger.get_logger(logger_name=f'{func.__name__}')
         else:
             logger = default_logger()
         @wraps(func)

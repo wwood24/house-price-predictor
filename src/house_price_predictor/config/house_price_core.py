@@ -14,12 +14,14 @@ PROJECT_ROOT = Path(house_price_predictor.__file__).resolve().parent
 ROOT = PROJECT_ROOT.parent
 DATA_DIR = Path(os.getenv('DATA_DIR','/app/data'))
 CONFIG_FILE_PATH = PROJECT_ROOT /'house_price_config.yml'
+LOG_DIR = Path(os.getenv('LOG_DIR','/app/logging'))
 
 class AppConfig(BaseModel):
     package_name: str
     mlflow_tracking_uri: str
     mlflow_experiment_id: str
     mlflow_run_name: str
+    house_price_log_file: str
     raw_data_file: str
     clean_data_file: str
     train_file: str

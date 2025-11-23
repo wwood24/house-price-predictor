@@ -2,6 +2,7 @@ package_name: house_price_predictor
 mlflow_tracking_uri: http://localhost:5000
 mlflow_experiment_id: 6
 mlflow_run_name: final_training
+house_price_log_file: houseprice.log
 raw_data_file: train.csv
 clean_data_file: house_price_processed.pkl
 train_file: train_data.pkl
