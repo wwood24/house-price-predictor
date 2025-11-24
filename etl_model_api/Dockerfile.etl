@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY /etl_model_api .
 
-COPY src /app/src
+COPY src/ /app/src
 
 COPY pyproject.toml /app/src
 
