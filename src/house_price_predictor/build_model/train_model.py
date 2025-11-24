@@ -50,7 +50,7 @@ class HousePriceProductionModel:
         return self.model
     
     def train_log_model_experiment(self,x_train:pd.DataFrame,x_test:pd.DataFrame,
-                                   y_train:pd.Series,y_test:pd.Series,model_prod_name:str):
+                                   y_train:pd.Series,y_test:pd.Series):
         
         # set up mlflow
         mlflow.set_tracking_uri(self.mlflow_tracking_uri)
@@ -124,9 +124,11 @@ class HousePriceProductionModel:
             
         return model_run
     
-    def move_model_to_production(self,model_version:int,model_stage:str):
+    def move_model_to_production(self,model_stage:str):
         client = MlflowClient()
         # Transition model to "Staging"
+        registered_model = client.get_registered_model(name=self.prod_model_name)
+        model_version = registered_model.latest_versions[0] # get latest
         client.transition_model_version_stage(
             name=self.prod_model_name,
         version=model_version,stage=model_stage,archive_existing_versions=True)
@@ -152,7 +154,13 @@ class HousePriceProductionModel:
             "numpy_version": np.__version__}
         for k, v in deps.items():
             client.set_registered_model_tag(self.prod_model_name, k, v)
-        
-        return 
+
+        registered_model = client.get_registered_model(name=self.prod_model_name)
+        model_version = registered_model.latest_versions[0] # get latest
+        model_stage = model_version.current_stage
+        return {'model_name':registered_model.name,
+            'model_version':model_version,
+            'model_stage':model_stage}
+         
 
 

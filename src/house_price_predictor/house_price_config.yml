@@ -1,5 +1,4 @@
 package_name: house_price_predictor
-mlflow_tracking_uri: http://localhost:5000
 mlflow_experiment_id: 6
 mlflow_run_name: final_training
 house_price_log_file: houseprice.log
@@ -47,7 +46,10 @@ linear_scaled_features:
  - TotalBsmtSF
  - total_sf
 preprocess_pipeline_name: house_price_preprocessor
-model_name: house_price_model
+preprocessor_model_name: house-price-preprocessor-sklean
+preprocessor_stage: Stagging
+model_name: house-price-model-lgbm
+ml_model_stage: Stagging
 model_type: tree
 best_model: LightGBM
 best_model_params:
