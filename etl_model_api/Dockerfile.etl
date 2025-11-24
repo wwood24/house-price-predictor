@@ -2,15 +2,15 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY /etl_model_api .
+COPY etl_model_api .
 
 COPY src/ /app/src
 
-COPY pyproject.toml /app/src
+COPY pyproject.toml .
 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN pip install /app/src
 
-CMD ['python',"-m", "main.py"]
+CMD ["python3", "main.py"]
