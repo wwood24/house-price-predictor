@@ -14,11 +14,14 @@ PROJECT_ROOT = Path(house_price_predictor.__file__).resolve().parent
 ROOT = PROJECT_ROOT.parent
 DATA_DIR = Path(os.getenv('DATA_DIR','/app/data'))
 CONFIG_FILE_PATH = PROJECT_ROOT /'house_price_config.yml'
+LOG_DIR = Path(os.getenv('LOG_DIR','/app/logging'))
+MLFLOW_TRACKING_URI = os.getenv('MLFLOW_TRACKING_URI','http://host.containiers.internal:5000')
 
 class AppConfig(BaseModel):
     package_name: str
-    mlflow_tracking_uri: str
-    mlflow_experiment_id: int
+    mlflow_experiment_id: str
+    mlflow_run_name: str
+    house_price_log_file: str
     raw_data_file: str
     clean_data_file: str
     train_file: str
@@ -34,7 +37,10 @@ class ModelConfig(BaseModel):
     binary_features: t.List[str]
     linear_scaled_features: t.List[str]
     preprocess_pipeline_name: str
+    preprocessor_model_name: str
+    preprocessor_alias: str
     model_name: str
+    ml_model_alias: str
     model_type: str
     best_model:str
     best_model_params: t.Dict[str,t.Any]
