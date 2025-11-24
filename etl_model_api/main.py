@@ -66,12 +66,10 @@ def preprocessing_training_pipeline():
     registered_model = client.get_registered_model(name=config.model_configs.preprocessor_model_name)
     model_version = registered_model.latest_versions[0] # get latest
     
-    
-    client.transition_model_version_stage(
-        name=config.model_configs.preprocessor_model_name,
-        version=model_version,
-        stage=config.model_configs.preprocessor_stage,
-        archive_existing_versions=True
+    client.set_registered_model_alias(
+        name=registered_model.name,
+        version=model_version.version,
+        alias=config.model_configs.preprocessor_alias
     )
     description = 'This is an sklearn preprocessing pipeline that performs the cleaning, feature engineering and data transforms.'
     client.update_registered_model(
@@ -81,12 +79,11 @@ def preprocessing_training_pipeline():
     # call get model info to retrieve the current statge and model version for logs
     registered_model = client.get_registered_model(name=config.model_configs.preprocessor_model_name)
     model_version = registered_model.latest_versions[0] # get latest
-    model_stage = model_version.current_stage
     return {'preprocessor_uri': run.info.artifact_uri,
             'preprocessor_run_id':run.info.run_id,
             'model_name':registered_model.name,
             'model_version':model_version,
-            'model_stage':model_stage}
+            'model_alias':config.model_configs.preprocessor_alias}
 @house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/{config.app_configs.house_price_log_file}'))    
 def train_model():
     # load data
@@ -107,7 +104,7 @@ def train_model():
     print('Train and log model')
     active_run = house_price_model.train_log_model_experiment(x_train=x_train,x_test=x_test,
                                                  y_train=y_train,y_test=y_test)
-    model_info = house_price_model.move_model_to_production(model_stage=config.model_configs.ml_model_stage)
+    model_info = house_price_model.move_model_to_production(model_alias=config.model_configs.ml_model_alias)
     print('completed training and loging model')
     
     return {'model_uri':active_run.info.artifact_uri,

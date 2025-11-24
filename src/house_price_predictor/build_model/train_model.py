@@ -124,14 +124,15 @@ class HousePriceProductionModel:
             
         return model_run
     
-    def move_model_to_production(self,model_stage:str):
+    def move_model_to_production(self,model_alias:str):
         client = MlflowClient()
         # Transition model to "Staging"
         registered_model = client.get_registered_model(name=self.prod_model_name)
         model_version = registered_model.latest_versions[0] # get latest
-        client.transition_model_version_stage(
-            name=self.prod_model_name,
-        version=model_version,stage=model_stage,archive_existing_versions=True)
+        client.set_registered_model_alias(
+        name=registered_model.name,
+        version=model_version.version,
+        alias=model_alias)
         features = ['OverallQual','OverallCond','age_at_sale',
             'age_of_house_squared','house_have_remodel','GrLivArea','TotalBsmtSF',
             'total_sf','ratio_finished_bsmt','basement_ratio','total_full_baths',
@@ -157,10 +158,9 @@ class HousePriceProductionModel:
 
         registered_model = client.get_registered_model(name=self.prod_model_name)
         model_version = registered_model.latest_versions[0] # get latest
-        model_stage = model_version.current_stage
         return {'model_name':registered_model.name,
-            'model_version':model_version,
-            'model_stage':model_stage}
+            'model_version':model_version.version,
+            'model_alias':model_alias}
          
 
 

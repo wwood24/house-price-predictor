@@ -38,9 +38,9 @@ class ModelConfig(BaseModel):
     linear_scaled_features: t.List[str]
     preprocess_pipeline_name: str
     preprocessor_model_name: str
-    preprocessor_stage: str
+    preprocessor_alias: str
     model_name: str
-    ml_model_stage: str
+    ml_model_alias: str
     model_type: str
     best_model:str
     best_model_params: t.Dict[str,t.Any]
