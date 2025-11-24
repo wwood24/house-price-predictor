@@ -4,11 +4,11 @@ WORKDIR /app
 
 COPY etl_model_api .
 
-COPY src/ /app/src
+COPY src/ /src
 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install /app/src
+RUN pip install /src
 
 CMD ["python3", "main.py"]
