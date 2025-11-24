@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69.5.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "house_price_predictor"
+description = "A House Price Regression Predictor system with three container services."
+version = '0.1.0'
+readme = "README.md"
+authors = [
+    {name='Wesley Wood',email='wwood@ab.bluecross.ca'},
+    {name='MLOps Bootcamp at School of DevOps: https://schoolofdevops.com'}
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Development status :: 4-Beta",
+    "Programming Language :: Python :: 3.9"
+]
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+"house_price_predictor" = ["house_price_config.yml"]
+[project.urls]
+Repository="https://github.com/wwood24/house-price-predictor"
