@@ -36,3 +36,11 @@ Here are some of hte key things to go into a docker file
  - this will run the container with a volume mounted and assigned ot the locationcontainer folder within container for reference within code tag_name:latest will run the latest container image with that tag_name
 
 
+ Because I have special libraries need to add this to docker file:
+ # Install OS dependencies for compiled Python packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+
