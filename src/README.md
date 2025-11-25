@@ -27,7 +27,7 @@ all these functions and classes will be use din the etl_model_api and the the mo
 For this project its using a local version on the system as it set up with a backend postgress database to store metada for all projects other then this project.
 
 - within local builds the MLFLOW_TRACKING_URI for any project will set to local host and port 5000
-- since this code will be put into a podman container and needs to be able to communicate with this version of mlflow need set the MLFLOW_TRACKING_URI as en enviornment variable when running podman and have it set to **http://host.containers.internal:5000**
+- since this code will be put into a podman container and needs to be able to communicate with this version of mlflow need set the MLFLOW_TRACKING_URI as en enviornment variable when running podman and have it set to **http://localhost:5000** but when running container need the tag --network-host set so the container con communicate on same network as mlflow
 
 ### Key commands of mlflow
 

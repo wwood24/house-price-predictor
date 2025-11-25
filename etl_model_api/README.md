@@ -9,7 +9,7 @@ This will be the file that the container will call as its CMD
 
 - With this project the data and logs are housed within the local file system of this project and for clean small container as its already large with the packages we will mount volumes to the container at run time.
 
-- As Mlflow is running locally will need to call it with environment variable of **http://host.containers.internal:5000**
+- As Mlflow is running locally will need to call it with environment variable of **http://localhost:5000** but need tag --network=host so that container can see and resolve to the same network as host
 
 - when one runs the command podman build and use . its key and important to know where your a running this command from because the **.** becomes the entry point for this app thus when one is copying folders into the container need to know with relation to where one is located in relation to the . and the folders needed.
 
@@ -41,6 +41,7 @@ Here are some of hte key things to go into a docker file
 RUN apt-get update && apt-get install -y \
     build-essential \
     libgomp1 \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 
