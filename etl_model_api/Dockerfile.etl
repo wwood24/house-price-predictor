@@ -4,11 +4,13 @@ WORKDIR /app
 
 COPY etl_model_api .
 
-COPY src/ /src
+COPY src/ ./src
+
+COPY pyproject.toml .
 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install /src
+RUN pip install .
 
 CMD ["python3", "main.py"]
