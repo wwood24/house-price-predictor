@@ -47,9 +47,9 @@ linear_scaled_features:
  - total_sf
 preprocess_pipeline_name: house_price_preprocessor
 preprocessor_model_name: house-price-preprocessor-sklean
-preprocessor_alias: Staged
+preprocessor_alias: Production
 model_name: house-price-model-lgbm
-ml_model_alias: Staged
+ml_model_alias: Production
 model_type: tree
 best_model: LightGBM
 best_model_params:

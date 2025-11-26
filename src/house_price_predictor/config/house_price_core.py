@@ -15,7 +15,7 @@ ROOT = PROJECT_ROOT.parent
 DATA_DIR = Path(os.getenv('DATA_DIR','/app/data'))
 CONFIG_FILE_PATH = PROJECT_ROOT /'house_price_config.yml'
 LOG_DIR = Path(os.getenv('LOG_DIR','/app/logging'))
-MLFLOW_TRACKING_URI = os.getenv('MLFLOW_TRACKING_URI','http://host.containiers.internal:5000')
+MLFLOW_TRACKING_URI = os.getenv('MLFLOW_TRACKING_URI','http://localhost:5000')
 
 class AppConfig(BaseModel):
     package_name: str
