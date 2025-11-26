@@ -2,14 +2,20 @@ import joblib
 import pandas as pd
 from datetime import datetime
 from house_price_predictor.config.schemas import HousePredictionRequest, PredictionResponse
+from house_price_predictor.config.house_price_core import MLFLOW_TRACKING_URI,LOG_DIR,config
+import mlflow
+import typing as t
+import numpy as np
 
-# Load model and preprocessor
-MODEL_PATH = "models/trained/house_price_model.pkl"
-PREPROCESSOR_PATH = "models/trained/preprocessor.pkl"
+# load models
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+
+model_uri = f"models:/{config.model_configs.model_name}/latest"
+preprocessor_uri = f"models:/{config.model_configs.preprocessor_model_name}/latest"
 
 try:
-    model = joblib.load(MODEL_PATH)
-    preprocessor = joblib.load(PREPROCESSOR_PATH)
+    model = mlflow.lightgbm.load_model(model_uri)
+    preprocessor = mlflow.sklearn.load_model(preprocessor_uri)
 except Exception as e:
     raise RuntimeError(f"Error loading model or preprocessor: {str(e)}")
 
@@ -18,17 +24,14 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     Predict house price based on input features.
     """
     # Prepare input data
-    input_data = pd.DataFrame([request.dict()])
-    input_data['house_age'] = datetime.now().year - input_data['year_built']
-    input_data['bed_bath_ratio'] = input_data['bedrooms'] / input_data['bathrooms']
-    input_data['price_per_sqft'] = 0  # Dummy value for compatibility
-
+    input_data = pd.DataFrame([request.model_dump(mode='python')])
+    
     # Preprocess input data
     processed_features = preprocessor.transform(input_data)
 
     # Make prediction
-    predicted_price = model.predict(processed_features)[0]
-
+    predicted_price = model.predict(processed_features)[0] # model returns an value in array shape
+    
     # Convert numpy.float32 to Python float and round to 2 decimal places
     predicted_price = round(float(predicted_price), 2)
 
@@ -45,15 +48,16 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
         prediction_time=datetime.now().isoformat()
     )
 
-def batch_predict(requests: list[HousePredictionRequest]) -> list[float]:
+def batch_predict(requests: list[HousePredictionRequest]) -> t.List[float]:
     """
     Perform batch predictions.
     """
-    input_data = pd.DataFrame([req.dict() for req in requests])
-    input_data['house_age'] = datetime.now().year - input_data['year_built']
-    input_data['bed_bath_ratio'] = input_data['bedrooms'] / input_data['bathrooms']
-    input_data['price_per_sqft'] = 0  # Dummy value for compatibility
-
+    input_data = pd.DataFrame()
+    for req in requests:
+        data = pd.DataFrame(req.model_dump(mode='python'))
+        input_data = pd.concat([input_data,data],ignore_index=True,
+                               sort=False)
+    del data
     # Preprocess input data
     processed_features = preprocessor.transform(input_data)
 
