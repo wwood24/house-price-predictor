@@ -34,6 +34,16 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     
     # Convert numpy.float32 to Python float and round to 2 decimal places
     predicted_price = round(float(predicted_price), 2)
+    
+    feature_contri = model.predict(processed_features,pred_contrib=True)
+    
+    shape_featue_df = pd.DataFrame(feature_contri,
+                                   columns = ['OverallQual','OverallCond','age_at_sale',
+                                              'age_of_house_squared','house_have_remodel','GrLivArea',
+                                              'TotalBsmtSF','total_sf','ratio_finished_bsmt','basement_ratio',
+                                              'total_full_baths','total_half_baths','BedroomAbvGr',
+                                              'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
+                                              'garage_finished','expected_value'])
 
     # Confidence interval (10% range)
     confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
@@ -44,11 +54,11 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     return PredictionResponse(
         predicted_price=predicted_price,
         confidence_interval=confidence_interval,
-        features_importance={},
+        shape_feature_contributions=shape_featue_df,
         prediction_time=datetime.now().isoformat()
     )
 
-def batch_predict(requests: list[HousePredictionRequest]) -> t.List[float]:
+def batch_predict(requests: list[HousePredictionRequest]) -> pd.DataFrame:
     """
     Perform batch predictions.
     """
@@ -63,4 +73,16 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[float]:
 
     # Make predictions
     predictions = model.predict(processed_features)
-    return predictions.tolist()
+    # get shape feature contributions
+    feature_contri = model.predict(processed_features,pred_contrib=True)
+    
+    prediction_df = pd.DataFrame(feature_contri,
+                                   columns = ['OverallQual','OverallCond','age_at_sale',
+                                              'age_of_house_squared','house_have_remodel','GrLivArea',
+                                              'TotalBsmtSF','total_sf','ratio_finished_bsmt','basement_ratio',
+                                              'total_full_baths','total_half_baths','BedroomAbvGr',
+                                              'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
+                                              'garage_finished','expected_value'])
+    prediction_df['predictions']=predictions
+    
+    return prediction_df

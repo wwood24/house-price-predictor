@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 import typing as t
+import pandas as pd
 
 class HousePredictionRequest(BaseModel):
     YearBuilt: int = Field(...,gt=1800,description='Year House was built')
@@ -23,5 +24,5 @@ class HousePredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     predicted_price: float
     confidence_interval: t.List[float]
-    features_importance: t.Dict[str,float]
+    features_importance: pd.DataFrame
     prediction_time: str
