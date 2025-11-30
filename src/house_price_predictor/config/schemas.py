@@ -24,5 +24,5 @@ class HousePredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     predicted_price: float
     confidence_interval: t.List[float]
-    features_importance: pd.DataFrame
+    features_importance: t.Dict[str,float]
     prediction_time: str

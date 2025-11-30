@@ -46,6 +46,8 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
                                               'total_full_baths','total_half_baths','BedroomAbvGr',
                                               'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
                                               'garage_finished','expected_value'])
+    
+    feature_contri_dict = shape_featue_df.to_dict()
 
     # Confidence interval (10% range)
     confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
@@ -56,8 +58,8 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     return PredictionResponse(
         predicted_price=predicted_price,
         confidence_interval=confidence_interval,
-        shape_feature_contributions=shape_featue_df,
-        prediction_time=datetime.now().isoformat()
+        shape_feature_contributions=feature_contri_dict
+        prediction_time=f'{datetime.now().isoformat()}'
     )
 @house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/inference.log'))
 def batch_predict(requests: list[HousePredictionRequest]) -> pd.DataFrame:
