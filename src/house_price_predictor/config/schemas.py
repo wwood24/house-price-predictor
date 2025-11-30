@@ -7,7 +7,6 @@ class HousePredictionRequest(BaseModel):
     OverallQual: int = Field(...,ge=1,le=10,description='Overall Quality of House material as a scale of 1-10')
     OverallCond: int = Field(...,ge=1,le=10,description='Overall Condition of House as scale of 1-10')
     house_have_remodel: t.Literal['yes','no'] = Field(...,description='Has the house have any remodels done')
-    GrLivArea: float = Field(..., gt=0, description="Square footage of the house above Ground")
     BsmtFinSF: float = Field(...,ge=0, description='Square footage of finished basement.')
     TotalBsmtSF: float = Field(...,ge=0,description='Total Square feet of Basement')
     GrLivArea: float = Field (...,gt=0,description='Total Square feet of living place above ground.')

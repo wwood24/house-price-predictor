@@ -110,7 +110,7 @@ class HousePricePreprocessor(BaseEstimator,TransformerMixin):
         pd.DataFrame
         """
         
-        if 'YrSold' in self.feature_names:
+        if 'YrSold' in X.columns:
             X['age_at_sale'] = X['YrSold'] - X['YearBuilt']
         else:
             # no YrSold found this implies data is inference data being passed and thus will
@@ -119,9 +119,9 @@ class HousePricePreprocessor(BaseEstimator,TransformerMixin):
             today_year = today_date.year
             X['age_at_sale'] = today_year = X['YearBuilt']
         X['age_of_house_squared'] = X['age_at_sale']**2
-        if 'house_have_remodel' not in self.feature_names and 'YearRemodAdd' in self.feature_names:
+        if 'house_have_remodel' not in X.columns and 'YearRemodAdd' in X.columns:
             X['house_have_remodel']= np.where(X['YearBuilt']!=X['YearRemodAdd'],'yes','no')
-        elif 'house_have_remodel' not in self.feature_names and 'YearRemodAdd' not in self.feature_names:
+        elif 'house_have_remodel' not in X.columns and 'YearRemodAdd' not in X.columns:
             X['house_have_remodel']='no'
         # ratio of finished basement sf to total basement sf
         X['ratio_finished_bsmt']=X['BsmtFinSF']/(X['TotalBsmtSF']+1)
@@ -132,9 +132,9 @@ class HousePricePreprocessor(BaseEstimator,TransformerMixin):
         # ratio of of beds to bathrooms
         X['bed_bath_ratio'] = X['BedroomAbvGr']/X['total_full_baths']
         X['bed_bath_ratio'] = X['bed_bath_ratio'].replace([np.inf,-np.inf],np.nan).fillna(0)
-        if 'GarageType' in self.feature_names:
+        if 'GarageType' in X.columns:
             X['has_garage'] = np.where(~X['GarageType'].isnull(),'yes','no')
-        if 'GarageFinish' in self.feature_names:
+        if 'GarageFinish' in X.columns:
             X['garage_finished'] =np.where((X['GarageFinish']=='RFn')|
                                            (X['GarageFinish']=='Fin'),'yes',
                                            'no')
