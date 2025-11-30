@@ -46,3 +46,26 @@ when running podman ensure have the flag --network=host set so that the containe
  - i is a flag for interactive.  this allows you to send commands to the container via your terminal
  - d detatch. Runs the container in detached mode.this allows you to continue to use the terminal
  - t pseudo terminal.  provides a terminal interface within the container.
+
+ ## main 
+ This houses the code for the fast api.
+
+ The **app** is an FastAPI object with the following parameters set at creation
+
+ - title
+ - description
+ - version
+ - contact: Left the contact of the people from the course but added mine as well as I've edited this
+ - licence
+
+ from fast api imported CORS middleware.  CORS(CROSS-ORIGIN RESCOURSE SHARING) refers to situations when a frontend running in a browser that communicates with a backend, and the backend is in a different "orgin" that the frontend
+
+ **Origin**: is the combination of protocol (http, https), domain and port.  As result the following are all different origins
+
+ - http://localhost
+ - https://localhost
+ - http://localhost:8000
+
+ Even though that are all in the localhost because they are using different portocols or ports they are different "origins".
+
+ 
