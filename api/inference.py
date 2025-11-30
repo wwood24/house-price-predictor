@@ -47,7 +47,8 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
                                               'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
                                               'garage_finished','expected_value'],index=[0])
     
-    feature_contri_dict = shape_featue_df.to_dict(orient='records')
+    
+    feature_contri_dict = shape_featue_df.to_dict(orient='records')[0]
 
     # Confidence interval (10% range)
     confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
