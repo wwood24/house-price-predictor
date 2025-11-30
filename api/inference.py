@@ -6,6 +6,7 @@ from house_price_predictor.config.house_price_core import MLFLOW_TRACKING_URI,LO
 import mlflow
 import typing as t
 import numpy as np
+from house_price_predictor.utils.house_price_logging import HousePriceLogger,house_price_logger
 
 # load models
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
@@ -19,6 +20,7 @@ try:
 except Exception as e:
     raise RuntimeError(f"Error loading model or preprocessor: {str(e)}")
 
+@house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/inference.log'))
 def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     """
     Predict house price based on input features.
@@ -57,7 +59,7 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
         shape_feature_contributions=shape_featue_df,
         prediction_time=datetime.now().isoformat()
     )
-
+@house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/inference.log'))
 def batch_predict(requests: list[HousePredictionRequest]) -> pd.DataFrame:
     """
     Perform batch predictions.
