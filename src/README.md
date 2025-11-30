@@ -66,6 +66,8 @@ print(f'{registered_model.name})
 print(f'{registered_model.version})
 ```
 
+# Podman key things
+Since mlflow is being control and ran outside the container a key thing required when running these containers. Even though we pass the mlflow_tracking_uri as an enviornment variable and the experiment is getting tracking the logging would not unless one mounts that location into the container at runtime.  As a result any container that is required access to models or log models need to mount the file location where the runs get located within host system.  This is only for when having mlflow running outside these containers.
 
 
 
