@@ -14,7 +14,7 @@ class HousePredictionRequest(BaseModel):
     BsmtFullBath: int = Field(...,ge=0,description='Number of Full Baths in basement')
     HalfBath: int = Field(...,ge=0,desciption='Number of Half baths above ground.')
     BsmtHalfBath: int = Field(...,ge=0,description='Number of Half Baths in basement')
-    BedroomAbvGr: float = Field(..., ge=0, description="Number of bathrooms")
+    BedroomAbvGr: float = Field(..., ge=0, description="Number of bedrooms")
     has_garage: t.Literal['yes','no'] = Field(...,description='Does place have a garage or not')
     garage_finished: t.Literal['yes','no'] = Field(...,description='Is the Garage finished or not')
     
