@@ -12,10 +12,9 @@ app = FastAPI(
     ),
     version="1.0.0",
     contact={
-        "name": "School of Devops",
-        "url": "https://schoolofdevops.com",
-        "email1": "learn@schoolofdevops.com",
-        "email2": "wwood@ab.bluecross.ca"
+        "name": "Wesley",
+        "url": "https://github.com/wwood24/house-price-predictor",
+        "email": "wwood@ab.bluecross.ca"
     },
     license_info={
         "name": "Apache 2.0",
@@ -33,7 +32,7 @@ app.add_middleware(
 )
 
 # Health check endpoint
-@app.get("/health", response_model=t.Dict)
+@app.get("/health", response_model=dict)
 async def health_check():
     return {"status": "healthy", "model_loaded": True}
 
