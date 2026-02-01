@@ -109,7 +109,7 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionRe
                 PredictionResponse(
                     predicted_price=np.nan,
                     confidence_interval=[np.nan,np.nan],
-                    feature_contribution={'error':'none'},
+                    feature_contribution={'error':np.nan},
                     prediction_time=f'{datetime.now().isoformat()}',
                     status=f'{str(e)}'
                 )
