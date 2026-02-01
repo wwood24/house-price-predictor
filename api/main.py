@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from inference import predict_price, batch_predict
 from house_price_predictor.config.schemas import HousePredictionRequest, PredictionResponse
-
+import typing as t
 # Initialize FastAPI app with metadata
 app = FastAPI(
     title="House Price Prediction API",
@@ -34,7 +34,7 @@ app.add_middleware(
 )
 
 # Health check endpoint
-@app.get("/health", response_model=dict)
+@app.get("/health", response_model=t.Dict)
 async def health_check():
     return {"status": "healthy", "model_loaded": True}
 
@@ -44,6 +44,6 @@ async def predict(request: HousePredictionRequest):
     return predict_price(request)
 
 # Batch prediction endpoint
-@app.post("/batch-predict", response_model=list)
-async def batch_predict_endpoint(requests: list[HousePredictionRequest]):
+@app.post("/batch-predict", response_model=t.List(PredictionResponse))
+async def batch_predict_endpoint(requests: t.List[HousePredictionRequest]):
     return batch_predict(requests)

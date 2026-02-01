@@ -25,3 +25,4 @@ class PredictionResponse(BaseModel):
     confidence_interval: t.List[float]
     feature_contribution: t.Dict[str,float]
     prediction_time: str
+    status: str
