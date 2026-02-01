@@ -107,9 +107,9 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionRe
         except Exception as e:
             results.append(
                 PredictionResponse(
-                    predicted_price=None,
-                    confidence_interval=None,
-                    feature_contribution=None,
+                    predicted_price=np.nan,
+                    confidence_interval=[np.nan,np.nan],
+                    feature_contribution={'error':'none'},
                     prediction_time=f'{datetime.now().isoformat()}',
                     status=f'{str(e)}'
                 )
