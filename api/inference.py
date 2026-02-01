@@ -69,7 +69,7 @@ def batch_predict(requests: list[HousePredictionRequest]) -> pd.DataFrame:
     """
     input_data = pd.DataFrame()
     for req in requests:
-        data = pd.DataFrame(req.model_dump(mode='python'))
+        data = pd.DataFrame([req.model_dump(mode='python')])
         input_data = pd.concat([input_data,data],ignore_index=True,
                                sort=False)
     del data

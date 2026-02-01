@@ -14,12 +14,12 @@ This will be the file that the container will call as its CMD
 - when one runs the command podman build and use . its key and important to know where your a running this command from because the **.** becomes the entry point for this app thus when one is copying folders into the container need to know with relation to where one is located in relation to the . and the folders needed.
 
 ## Key elements to go into a docker file
-Here are some of hte key things to go into a docker file
+Here are some of the key things to go into a docker file
 
 - **FROM python:version-slim**:
- - this is the base image of the container and sets the foundation of your container provdiing pre-configured enviornment within a python install.
+ - this is the base image of the container and sets the foundation of your container providing pre-configured enviornment within a python install.
 - **WORKDIR /folder**:
- - this sets the working directory within the image and thus any calls of RUN, COPY OR ADD will operatate realtive to this new working directory.
+ - this sets the working directory within the image and thus any calls of RUN, COPY OR ADD will operatate relative to this new working directory.
 - **COPY**:
  - use this compand to copy something like a file or folder within the container
 - **RUN pip install -r requirments.txt**: 
@@ -30,7 +30,7 @@ Here are some of hte key things to go into a docker file
  ## commands to build and run container
 
  - **podman build -t tag_name -f /folder/Dockerfile .**:
-  - this command will build the container image with tag_name as its tag one ues the -f if the docker file is not within the root of where one is running the command and "." will set this current directory your in as the relative path starting point which is key to remember when filling in the copy comands in the docker file.
+  - this command will build the container image with tag_name as its tag one uses the -f if the docker file is not within the root of where one is running the command and "." will set this current directory your in as the relative path starting point which is key to remember when filling in the copy comands in the docker file.
 
 - **podman run -v /data/:locactionincontainer -e some_env_variable tag_name:latest**:
  - this will run the container with a volume mounted and assigned ot the locationcontainer folder within container for reference within code tag_name:latest will run the latest container image with that tag_name
