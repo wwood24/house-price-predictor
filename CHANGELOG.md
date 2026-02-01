@@ -14,7 +14,24 @@ The fast api and streamlit app will be combined into a single docker compose whi
 
 ## etl model service
 
-Here we 
+Here we break down how to build and run the container
+
+to build the image
+
+```bash
+podman build --no-cache -t house_price_etl -f /etl_model_api/Dockerfile.etl
+```
+
+
+To run the container:
+```bash
+podman run --network=host  --rm -v /directory/data:/app/data -v /directory/logging:/app/logging -e DATA_DIR=/app/data -e LOG_DIR=/app/logging -e MLFLOW_TRACKING_URI=http://ipaddress:port -v /directory/mlflow/mlruns:/directory/mlflow/mlruns  house_price_etl:latest
+
+```
+
+-network=host: means that the container will share the network namespace and stack with the host machine we need this because we need container to be able to communicate with mlflow which is running on host machine not within the container.
+- v is for volume this allows us to bind the source dir into the container dir so that we can communicate with data outside or send data outside the container.
+-e enviornment variables we want to set at run time for the container to have.
 
 ## Fast API Container
 
