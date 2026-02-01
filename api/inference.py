@@ -6,6 +6,7 @@ from house_price_predictor.config.house_price_core import MLFLOW_TRACKING_URI,LO
 import mlflow
 import typing as t
 import numpy as np
+from house_price_predictor.utils.house_price_logging import HousePriceLogger,house_price_logger
 
 # load models
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
@@ -19,48 +20,109 @@ try:
 except Exception as e:
     raise RuntimeError(f"Error loading model or preprocessor: {str(e)}")
 
+@house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/inference.log'))
 def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     """
     Predict house price based on input features.
     """
-    # Prepare input data
-    input_data = pd.DataFrame([request.model_dump(mode='python')])
+    try:
+        # Prepare input data
+        input_data = pd.DataFrame([request.model_dump(mode='python')])
     
-    # Preprocess input data
-    processed_features = preprocessor.transform(input_data)
+        # Preprocess input data
+        processed_features = preprocessor.transform(input_data)
 
-    # Make prediction
-    predicted_price = model.predict(processed_features)[0] # model returns an value in array shape
+        # Make prediction
+        predicted_price = model.predict(processed_features)[0] # model returns an value in array shape
     
-    # Convert numpy.float32 to Python float and round to 2 decimal places
-    predicted_price = round(float(predicted_price), 2)
+        # Convert numpy.float32 to Python float and round to 2 decimal places
+        predicted_price = round(float(predicted_price), 2)
+    
+        feature_contri = model.predict(processed_features,pred_contrib=True)
+    
+        shape_featue_df = pd.DataFrame(feature_contri,
+                                   columns = ['OverallQual','OverallCond','age_at_sale',
+                                              'age_of_house_squared','house_have_remodel','GrLivArea',
+                                              'TotalBsmtSF','total_sf','ratio_finished_bsmt','basement_ratio',
+                                              'total_full_baths','total_half_baths','BedroomAbvGr',
+                                              'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
+                                              'garage_finished','expected_value'],index=[0])
+    
+    
+        feature_contri_dict = shape_featue_df.to_dict(orient='records')[0]
 
-    # Confidence interval (10% range)
-    confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
+        # Confidence interval (10% range)
+        confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
 
-    # Convert confidence interval values to Python float and round to 2 decimal places
-    confidence_interval = [round(float(value), 2) for value in confidence_interval]
+        # Convert confidence interval values to Python float and round to 2 decimal places
+        confidence_interval = [round(float(value), 2) for value in confidence_interval]
 
-    return PredictionResponse(
-        predicted_price=predicted_price,
-        confidence_interval=confidence_interval,
-        features_importance={},
-        prediction_time=datetime.now().isoformat()
-    )
-
-def batch_predict(requests: list[HousePredictionRequest]) -> t.List[float]:
+        return PredictionResponse(
+            predicted_price=predicted_price,
+            confidence_interval=confidence_interval,
+            feature_contribution=feature_contri_dict,
+            prediction_time=f'{datetime.now().isoformat()}',
+            status='success'
+        
+        )
+    except Exception as e:
+        return PredictionResponse(
+            predicted_price=0,
+            confidence_interval=0,
+            feature_contribution={"error":0},
+            prediction_time=f'{datetime.now().isoformat()}',
+            status=f'{str(e)}'
+        )
+@house_price_logger(HousePriceLogger(log_file=f'{LOG_DIR}/inference.log'))
+def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionResponse]:
     """
     Perform batch predictions.
     """
-    input_data = pd.DataFrame()
+    results = []
     for req in requests:
-        data = pd.DataFrame(req.model_dump(mode='python'))
-        input_data = pd.concat([input_data,data],ignore_index=True,
-                               sort=False)
-    del data
-    # Preprocess input data
-    processed_features = preprocessor.transform(input_data)
-
-    # Make predictions
-    predictions = model.predict(processed_features)
-    return predictions.tolist()
+        data = pd.DataFrame([req.model_dump(mode='python')])
+        try:
+            # Preprocess input data
+            processed_features = preprocessor.transform(data)
+            # Make predictions
+            predicted_price = model.predict(processed_features)[0]
+            # round to numpy with two decimals
+            predicted_price = round(float(predicted_price),2)
+            # get shape feature contributions
+            feature_contri = model.predict(processed_features,pred_contrib=True)
+            shape_featue_df = pd.DataFrame(feature_contri,
+                                   columns = ['OverallQual','OverallCond','age_at_sale',
+                                              'age_of_house_squared','house_have_remodel','GrLivArea',
+                                              'TotalBsmtSF','total_sf','ratio_finished_bsmt','basement_ratio',
+                                              'total_full_baths','total_half_baths','BedroomAbvGr',
+                                              'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
+                                              'garage_finished','expected_value'],index=[0])
+            feature_contri_dict = shape_featue_df.to_dict(orient='records')[0]
+            # Confidence interval (10% range)
+            confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
+            # Convert confidence interval values to Python float and round to 2 decimal places
+            confidence_interval = [round(float(value), 2) for value in confidence_interval]
+            results.append(
+                PredictionResponse(
+                    predicted_price=predicted_price,
+                    confidence_interval=confidence_interval,
+                    feature_contribution=feature_contri_dict,
+                    prediction_time=f'{datetime.now().isoformat()}',
+                    status='success'
+                )
+            )
+        except Exception as e:
+            results.append(
+                PredictionResponse(
+                    predicted_price=0,
+                    confidence_interval=[0,0],
+                    feature_contribution={'error':0},
+                    prediction_time=f'{datetime.now().isoformat()}',
+                    status=f'{str(e)}'
+                )
+            )
+            
+    
+ 
+    
+    return results

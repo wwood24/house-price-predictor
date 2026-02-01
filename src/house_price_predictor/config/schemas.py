@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
 import typing as t
+import pandas as pd
 
 class HousePredictionRequest(BaseModel):
     YearBuilt: int = Field(...,gt=1800,description='Year House was built')
     OverallQual: int = Field(...,ge=1,le=10,description='Overall Quality of House material as a scale of 1-10')
     OverallCond: int = Field(...,ge=1,le=10,description='Overall Condition of House as scale of 1-10')
     house_have_remodel: t.Literal['yes','no'] = Field(...,description='Has the house have any remodels done')
-    GrLivArea: float = Field(..., gt=0, description="Square footage of the house above Ground")
     BsmtFinSF: float = Field(...,ge=0, description='Square footage of finished basement.')
     TotalBsmtSF: float = Field(...,ge=0,description='Total Square feet of Basement')
     GrLivArea: float = Field (...,gt=0,description='Total Square feet of living place above ground.')
@@ -23,5 +23,6 @@ class HousePredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     predicted_price: float
     confidence_interval: t.List[float]
-    features_importance: t.Dict[str,float]
+    feature_contribution: t.Dict[str,float]
     prediction_time: str
+    status: str

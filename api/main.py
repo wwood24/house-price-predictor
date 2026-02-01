@@ -2,20 +2,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from inference import predict_price, batch_predict
 from house_price_predictor.config.schemas import HousePredictionRequest, PredictionResponse
-
 # Initialize FastAPI app with metadata
 app = FastAPI(
     title="House Price Prediction API",
     description=(
         "An API for predicting house prices based on various features. "
-        "This application is part of the MLOps Bootcamp by School of Devops. "
-        "Authored by Gourav Shah."
+        "This application is part of the MLOps Bootcamp by School of Devops course. "
+        "Authored by Gourav Shah and modified by Wesley Wood"
     ),
     version="1.0.0",
     contact={
-        "name": "School of Devops",
-        "url": "https://schoolofdevops.com",
-        "email": "learn@schoolofdevops.com",
+        "name": "Wesley",
+        "url": "https://github.com/wwood24/house-price-predictor",
+        "email": "wwood@ab.bluecross.ca"
     },
     license_info={
         "name": "Apache 2.0",
@@ -43,6 +42,6 @@ async def predict(request: HousePredictionRequest):
     return predict_price(request)
 
 # Batch prediction endpoint
-@app.post("/batch-predict", response_model=list)
+@app.post("/batch-predict", response_model=list[PredictionResponse])
 async def batch_predict_endpoint(requests: list[HousePredictionRequest]):
     return batch_predict(requests)
