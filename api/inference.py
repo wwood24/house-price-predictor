@@ -67,9 +67,9 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
         )
     except Exception as e:
         return PredictionResponse(
-            predicted_price=None,
-            confidence_interval=None,
-            feature_contribution=None,
+            predicted_price=0,
+            confidence_interval=0,
+            feature_contribution={"error":0},
             prediction_time=f'{datetime.now().isoformat()}',
             status=f'{str(e)}'
         )
@@ -87,7 +87,7 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionRe
             # Make predictions
             predicted_price = model.predict(processed_features)[0]
             # round to numpy with two decimals
-            predict_price = round(float(predict_price),2)
+            predicted_price = round(float(predicted_price),2)
             # get shape feature contributions
             feature_contri = model.predict(processed_features,pred_contrib=True)
             feature_contri_dict = feature_contri.to_dict(orient='records')[0]
@@ -107,9 +107,9 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionRe
         except Exception as e:
             results.append(
                 PredictionResponse(
-                    predicted_price=np.nan,
-                    confidence_interval=[np.nan,np.nan],
-                    feature_contribution={'error':np.nan},
+                    predicted_price=0,
+                    confidence_interval=[0,0],
+                    feature_contribution={'error':0},
                     prediction_time=f'{datetime.now().isoformat()}',
                     status=f'{str(e)}'
                 )
