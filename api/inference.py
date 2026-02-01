@@ -90,7 +90,14 @@ def batch_predict(requests: list[HousePredictionRequest]) -> t.List[PredictionRe
             predicted_price = round(float(predicted_price),2)
             # get shape feature contributions
             feature_contri = model.predict(processed_features,pred_contrib=True)
-            feature_contri_dict = feature_contri.to_dict(orient='records')[0]
+            shape_featue_df = pd.DataFrame(feature_contri,
+                                   columns = ['OverallQual','OverallCond','age_at_sale',
+                                              'age_of_house_squared','house_have_remodel','GrLivArea',
+                                              'TotalBsmtSF','total_sf','ratio_finished_bsmt','basement_ratio',
+                                              'total_full_baths','total_half_baths','BedroomAbvGr',
+                                              'bedrooms_per_1ksf','bed_bath_ratio','has_garage',
+                                              'garage_finished','expected_value'],index=[0])
+            feature_contri_dict = shape_featue_df.to_dict(orient='records')[0]
             # Confidence interval (10% range)
             confidence_interval = [predicted_price * 0.9, predicted_price * 1.1]
             # Convert confidence interval values to Python float and round to 2 decimal places
