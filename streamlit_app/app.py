@@ -35,33 +35,33 @@ col1, col2 = st.columns(2, gap="large")
 with col1:
     st.markdown('<div class="card">', unsafe_allow_html=True)
     # Info
-    st.markdown(f"#Submit house details to predict is price")
+    st.markdown("## Submit house details to predict is price")
     # Year house built
     year_built = st.slider("**Year Built:**",
                            min_value=1800,max_value=int(dt.datetime.now().year),
                            value=2000,step=1)
     # Square Footage info
     liv_sqft_col,tot_bst_sqft_col,fin_bst_sqft_col = st.columns(3)
-    st.markdown("##Provide Square foot info")
+    st.markdown("### Provide Square foot info")
     with liv_sqft_col:
         grliv_area = st.number_input(label='Total Square feet above ground',
-                                     min_value=0,value=1200)
+                                     min_value=0,value=1200,step=50)
     with tot_bst_sqft_col:
         total_bsmtsf = st.number_input(label='Total Square feet basement',
-                                       min_value=0,value=1000)
+                                       min_value=0,value=1000,step=50)
     with fin_bst_sqft_col:
         bsmt_finsf = st.number_input(label='Square footage finished basement',
-                                     min_value=0,value=500)
+                                     min_value=0,value=500,step=50)
     qual_col,cond_col = st.columns(2)
-    st.markdown('##Provide House Condition info')
+    st.markdown('### Provide House Condition info')
     with qual_col:
         overall_qual = st.number_input('Overall Quality of house material',
                                        min_value=1,max_value=10,value=5)
     with cond_col:
         overall_cond = st.number_input('Overall Condition of House',
-                                       min_value=10,max_value=10,value=5)
+                                       min_value=1,max_value=10,value=5)
     full_bath_col,bsmt_full_bath_col,half_bath_col,bsmt_half_bath_col,bedroom_col=st.columns(5)
-    st.markdown('##Provide Bedroom and Bathroom info')
+    st.markdown('### Provide Bedroom and Bathroom info')
     with full_bath_col:
         fullbath = st.number_input(label='Number of full baths above ground',
                                    min_value=0,value=2)
@@ -80,7 +80,7 @@ with col1:
     
     # Additional info
     house_remodel_col,garage_col,finished_garage_col=st.columns(3)
-    st.markdown('##Provide Additional House Info')
+    st.markdown('### Provide Additional House Info')
     with house_remodel_col:
         house_have_remodel = st.selectbox(label='Has the house have any remodels',
                                           options=["no","yes"],index=0)
@@ -99,7 +99,7 @@ with col1:
 # Results section
 with col2:
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("<h2>Prediction Results</h2>", unsafe_allow_html=True)
+    st.markdown("## Prediction Results", unsafe_allow_html=True)
 
     # If button is clicked, show prediction
     if predict_button:
@@ -161,21 +161,6 @@ with col2:
         # Format the predicted price
         formatted_price = "${:,.0f}".format(pred["predicted_price"])
         st.markdown(f'<div class="prediction-value">{formatted_price}</div>', unsafe_allow_html=True)
-
-        # Display confidence score and model used
-        col_a, col_b = st.columns(2)
-        with col_a:
-            st.markdown('<div class="info-card">', unsafe_allow_html=True)
-            st.markdown('<p class="info-label">Confidence Score</p>', unsafe_allow_html=True)
-            st.markdown('<p class="info-value">92%</p>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        with col_b:
-            st.markdown('<div class="info-card">', unsafe_allow_html=True)
-            st.markdown('<p class="info-label">Model Used</p>', unsafe_allow_html=True)
-            st.markdown('<p class="info-value">XGBoost</p>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-
         # Display price range and prediction time
         col_c, col_d = st.columns(2)
         with col_c:
@@ -189,18 +174,20 @@ with col2:
         with col_d:
             st.markdown('<div class="info-card">', unsafe_allow_html=True)
             st.markdown('<p class="info-label">Prediction Time</p>', unsafe_allow_html=True)
-            st.markdown('<p class="info-value">0.12 seconds</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="info-value">{pred["prediction_time"]} seconds</p>', 
+                        unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
         # Top factors
         st.markdown('<div class="top-factors">', unsafe_allow_html=True)
-        st.markdown("<p><strong>Top Factors Affecting Price:</strong></p>", unsafe_allow_html=True)
-        st.markdown("""
-        <ul>
-            <li>Square Footage</li>
-            <li>Number of Bedrooms/Bathrooms</li>
-        </ul>
-        """, unsafe_allow_html=True)
+        st.markdown("### Top Factors Affecting Price:", unsafe_allow_html=True)
+        factors_dict = pred['feature_contribution']
+        factors_dict = dict(sorted(factors_dict.items(),key=lambda x: x[1],reverse=True))
+        final_dict = {}
+        for k,v in factors_dict.items():
+            if k !='expected_value':
+                final_dict[k] = round(v,2)
+        st.json(final_dict)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         # Display placeholder message
@@ -213,7 +200,7 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Fetch version, hostname, and IP address
-version = os.getenv("APP_VERSION", "1.0.0")  # Default version if not set in environment
+version = os.getenv("APP_VERSION", "0.1.0")  # Default version if not set in environment
 hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 
@@ -222,8 +209,8 @@ st.markdown("<hr>", unsafe_allow_html=True)  # Add a horizontal line for separat
 st.markdown(
     f"""
     <div style="text-align: center; color: gray; margin-top: 20px;">
-        <p><strong>Built for MLOps Bootcamp</strong></p>
-        <p>by <a href="https://www.schoolofdevops.com" target="_blank">School of Devops</a></p>
+        <p><strong>Built for MLOps tranining</strong></p>
+        <p>by <a href="https://github.com/wwood24/house-price-predictor" target="_blank">HousePricePredictor</a></p>
         <p><strong>Version:</strong> {version}</p>
         <p><strong>Hostname:</strong> {hostname}</p>
         <p><strong>IP Address:</strong> {ip_address}</p>
