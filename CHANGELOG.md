@@ -67,4 +67,19 @@ podman run -idt --network=host  -v SOURCE-LOG_DIR:CONTAINER-LOG-DIR -e LOG_DIR=C
 - v is for volume this allows us to bind the source dir into the container dir so that we can communicate with data outside or send data outside the container.
 -e enviornment variables we want to set at run time for the container to have.
 
+## Streamlit App
+
+Created the app.py which contains all the required code to deploy the streamlit app and connect to the fast api app which will be running outside 
+
+To build the image cd into the streamlit_app folder
+
+```bash
+podman build --no-cache -t house_price_app
+```
+
+in the docker file we have the command 
+
+- CMD ["streamlit","run" ,"app.py","--server.address"=0.0.0.0]
+
+we have it set to 0.0.0.0 and not 127.0.0.1 to allow things outside the container to reach the service running the container ie. the actual streamlit app needs to have it se to this to bind to the inside of the container the port we are exposing our system to.
 </details>
