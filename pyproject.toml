@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "house_price_predictor"
 description = "A House Price Regression Predictor system with three container services."
-version ="0.1.0"
+version ="1.0.0"
 readme = "README.md"
 authors = [
     {name="Wesley Wood",email="wwood@ab.bluecross.ca"},
