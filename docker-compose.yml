@@ -1,10 +1,9 @@
-version: '3'
 services:
   fastapi:
-    image: "house_price_api:latest"
+    image: "localhost/house_price_api:latest"
     build:
-      context: ./api
-      dockerfile: Dockerfile.api
+      context: .
+      dockerfile: api/Dockerfile.api
     ports:
       - 8000:8000
     environment:
@@ -14,7 +13,7 @@ services:
       - /home/ExraDrive/house_prices/logging:/app/logging
       - /home/ExraDrive/mlflow/mlruns:/home/ExraDrive/mlflow/mlruns 
   streamlit:
-    image: "house_price_app:latest"
+    image: "localhost/house_price_app:latest"
     build:
       context: ./streamlit_app
       dockerfile: Dockerfile.app
