@@ -6,6 +6,7 @@ services:
       dockerfile: api/Dockerfile.api
     ports:
       - 8000:8000
+    network_mode: host
     environment:
       - LOG_DIR=/app/logging
       - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
@@ -17,7 +18,8 @@ services:
     build:
       context: ./streamlit_app
       dockerfile: Dockerfile.app
+    environment:
+      - API_URL=http://localhost:8000
+    network_mode: host
     ports:
       - 8501:8501
-    depends_on:
-      - fastapi
