@@ -1,0 +1,25 @@
+services:
+  fastapi:
+    image: "localhost/house_price_api:latest"
+    build:
+      context: .
+      dockerfile: api/Dockerfile.api
+    ports:
+      - 8000:8000
+    network_mode: host
+    environment:
+      - LOG_DIR=/app/logging
+      - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
+    volumes:
+      - /home/ExraDrive/house_prices/logging:/app/logging
+      - /home/ExraDrive/mlflow/mlruns:/home/ExraDrive/mlflow/mlruns 
+  streamlit:
+    image: "localhost/house_price_app:latest"
+    build:
+      context: ./streamlit_app
+      dockerfile: Dockerfile.app
+    environment:
+      - API_URL=http://localhost:8000
+    network_mode: host
+    ports:
+      - 8501:8501
