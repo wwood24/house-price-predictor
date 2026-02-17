@@ -1,0 +1,12 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY model_training_etl .
+COPY src/ ./src
+COPY pyproject.toml .
+
+RUN pip install -r requirements.txt
+RUN pip install .
+
+CMD ["python3","main.py"]
