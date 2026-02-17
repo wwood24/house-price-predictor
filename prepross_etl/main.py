@@ -65,6 +65,7 @@ def run_preprocessing_pipeline():
     # call get model info to retrieve the current statge and model version for logs
     registered_model = client.get_registered_model(name=config.model_configs.preprocessor_model_name)
     model_version = registered_model.latest_versions[0] # get latest
+    print(f'To view the mlflow run for this is is the key info: uri:{run.info._artifact_uri},run_id:{run.info.run_id},model_name:{registered_model.name},version:{model_version}')
     return {'preprocessor_uri': run.info.artifact_uri,
             'preprocessor_run_id':run.info.run_id,
             'model_name':registered_model.name,
