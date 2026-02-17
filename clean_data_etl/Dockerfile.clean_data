@@ -1,0 +1,14 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY clean_data_etl .
+COPY src/ ./src
+COPY pyproject.toml .
+
+# run the install commands
+RUN pip install --no-cache-dir -r requirements.txt
+# this will install our actual project package defined by the pyproject.tom.
+RUN pip install .
+
+CMD ["python3","main.py"]
