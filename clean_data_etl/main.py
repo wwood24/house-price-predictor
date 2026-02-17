@@ -16,6 +16,9 @@ def clean_data_pipeline():
     clean_df.to_pickle(DATA_DIR/config.app_configs.clean_data_file)
     raw_shape = raw_data.shape
     process_shape = clean_df.shape
+    
+    print(f'We have completed the processing the raw data and have {raw_shape} as the break down of the raw data with {process_shape} from the processing data after clean up')
+    
     return {'raw_shaped':raw_shape,
             'processed_data_shape':process_shape}
     
